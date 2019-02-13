@@ -1,0 +1,169 @@
+---
+title: "Process eventDate"
+author: "Damiano Oldoni"
+date: "February 13, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup
+
+```{r}
+library(tidyverse)
+```
+
+
+## Read file
+
+```{r read_eventDate}
+dates <- read.csv("../data/raw/eventDates.csv", sep = ",")
+```
+
+## Extract year information
+
+Example:
+
+```{r extract_year_example}
+str_extract_all("1940, 2001", "[0-9]{4}")[[1]][1]
+```
+
+### First column
+
+From first column `SIR_start_year`:
+
+```{r extract_year_1scol}
+dates_start_year <-
+  map(dates$SIR_start_year, function(x) {
+    unlist(str_extract_all(x, "[0-9]{4}"))
+  }
+)
+```
+
+Maximum number of years in strings:
+
+```{r max_n_years}
+max_n_years <- max(map_int(dates_start_year, ~length(.)))
+```
+
+Give names to list elements:
+
+```{r give_names}
+names(dates_start_year) <- 
+  seq(1:length(dates_start_year))
+```
+
+Extract first year in column `first_year_start_year` of new data.frame `df_dates_start_year`:
+
+```{r extract_first_year}
+progress_bar <- progress_estimated(length(dates_start_year))
+df_dates_start_year <-
+  tibble(first_year_start_year = map_int(dates_start_year, 
+          function(x) {
+            progress_bar$tick()$print()
+            as.integer(x[1])
+          })
+  )
+```
+
+We add a second column called `second_year_start_year`
+
+```{r extract_second_year}
+progress_bar <- progress_estimated(length(dates_start_year))
+df_dates_start_year <-
+  df_dates_start_year %>%
+  mutate(second_year_start_year = map_int(dates_start_year, 
+          function(x) {
+            progress_bar$tick()$print()
+            if (length(x) > 1) {
+              as.integer(x[2])
+            } else {
+              NA
+            }
+          }
+  )
+)
+```
+
+Overview:
+
+```{r second_col_not_empty}
+df_dates_start_year %>% filter(!is.na(second_year_start_year))
+```
+
+We repeat same procedure on second column of our data: `SIR_end_year`.
+
+### Second column
+
+From first column `SIR_end_year`:
+
+```{r extract_year_2ndcol}
+dates_end_year <-
+  map(dates$SIR_end_year, function(x) {
+    unlist(str_extract_all(x, "[0-9]{4}"))
+  }
+)
+```
+
+Maximum number of years in strings:
+
+```{r max_n_years2}
+max_n_years <- max(map_int(dates_end_year, ~length(.)))
+```
+
+Give names to list elements:
+
+```{r give_names2}
+names(dates_end_year) <- 
+  seq(1:length(dates_end_year))
+```
+
+Extract first year in column `first_year_end_year` of new data.frame `df_dates_end_year`:
+
+```{r extract_first_year2}
+progress_bar <- progress_estimated(length(dates_end_year))
+df_dates_end_year <-
+  tibble(first_year_end_year = map_int(dates_end_year, 
+          function(x) {
+            progress_bar$tick()$print()
+            as.integer(x[1])
+          })
+  )
+```
+
+Overview:
+
+```{r first_col_not_empty2}
+df_dates_end_year %>% 
+  filter(!is.na(first_year_end_year)) %>% 
+  head()
+```
+
+We add a second column called `second_year_end_year`
+
+```{r extract_second_year2}
+progress_bar <- progress_estimated(length(dates_end_year))
+df_dates_end_year <-
+  df_dates_end_year %>%
+  mutate(second_year_end_year = map_int(dates_end_year, 
+          function(x) {
+            progress_bar$tick()$print()
+            if (length(x) > 1) {
+              as.integer(x[2])
+            } else {
+              NA
+            }
+          }
+  )
+)
+```
+
+Overview:
+
+```{r second_col_not_empty2}
+df_dates_end_year %>% 
+  filter(!is.na(second_year_end_year))
+```
+
