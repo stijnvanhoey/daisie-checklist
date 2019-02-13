@@ -155,6 +155,8 @@ df_dates <- bind_cols(
   df_dates_end_year)
 ```
 
+### Retrieve very first date
+
 Retrieve very first date present in the three new columns:
 
 ```{r first_year_final}
