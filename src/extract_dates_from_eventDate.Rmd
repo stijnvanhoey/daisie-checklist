@@ -187,7 +187,7 @@ df_dates <- bind_cols(
 Retrieve first and second date present in the four new columns:
 
 ```{r first_year_final}
-test <- df_dates %>%
+df_dates <- df_dates %>%
   mutate(first_year_final = 
            if_else(!is.na(first_year_start_year),
                    first_year_start_year,
