@@ -29,6 +29,12 @@ Example:
 ```{r extract_year_example}
 str_extract_all("1940, 2001", "[0-9]{4}")[[1]][1]
 ```
+## Negative years
+
+```{r}
+dates[which(str_extract_all(dates$SIR_end_year, "-") == TRUE)]
+```
+
 
 ### First column
 
@@ -178,13 +184,18 @@ df_dates <- bind_cols(
   df_dates_end_year)
 ```
 
-Do we have rows wtih four dates?
+Retrieve first and second date present in the four new columns:
 
-```{r overview}
-df_dates %>%
-  filter(!is.na(first_year_start_year) & 
-           !is.na(first_year_end_year) &
-           !is.na(second_year_start_year) & 
-           !is.na(second_year_end_year)
-  )
+```{r first_year_final}
+test <- df_dates %>%
+  mutate(first_year_final = 
+           if_else(!is.na(first_year_start_year),
+                   first_year_start_year,
+                   if_else(!is.na(second_year_start_year),
+                           second_year_start_year,
+                           if_else(!is.na(first_year_end_year),
+                                   first_year_end_year,
+                                   if_else(!is.na(first_year_end_year),
+                                           first_year_end_year,
+                                           second_year_end_year)))))
 ```
