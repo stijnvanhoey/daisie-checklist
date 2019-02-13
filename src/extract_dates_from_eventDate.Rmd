@@ -167,3 +167,24 @@ df_dates_end_year %>%
   filter(!is.na(second_year_end_year))
 ```
 
+### Merge dates to original data.frame
+
+Merge two data.frames with extracted dates and original data.frame:
+
+```{r merge_extracted_dates}
+df_dates <- bind_cols(
+  dates,
+  df_dates_start_year, 
+  df_dates_end_year)
+```
+
+Do we have rows wtih four dates?
+
+```{r overview}
+df_dates %>%
+  filter(!is.na(first_year_start_year) & 
+           !is.na(first_year_end_year) &
+           !is.na(second_year_start_year) & 
+           !is.na(second_year_end_year)
+  )
+```
