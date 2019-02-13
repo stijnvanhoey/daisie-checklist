@@ -29,11 +29,6 @@ Example:
 ```{r extract_year_example}
 str_extract_all("1940, 2001", "[0-9]{4}")[[1]][1]
 ```
-## Negative years
-
-```{r}
-dates[which(str_extract_all(dates$SIR_end_year, "-") == TRUE)]
-```
 
 
 ### First column
