@@ -52,6 +52,7 @@ Maximum number of years in strings:
 
 ```{r max_n_years}
 max_n_years <- max(map_int(dates_start_year, ~length(.)))
+max_n_years
 ```
 
 Give names to list elements:
@@ -117,6 +118,7 @@ Maximum number of years in strings:
 
 ```{r max_n_years2}
 max_n_years <- max(map_int(dates_end_year, ~length(.)))
+max_n_years
 ```
 
 Give names to list elements:
@@ -147,32 +149,6 @@ df_dates_end_year %>%
   head()
 ```
 
-We add a second column called `second_year_end_year`
-
-```{r extract_second_year2}
-progress_bar <- progress_estimated(length(dates_end_year))
-df_dates_end_year <-
-  df_dates_end_year %>%
-  mutate(second_year_end_year = map_int(dates_end_year, 
-          function(x) {
-            progress_bar$tick()$print()
-            if (length(x) > 1) {
-              as.integer(x[2])
-            } else {
-              NA
-            }
-          }
-  )
-)
-```
-
-Overview:
-
-```{r second_col_not_empty2}
-df_dates_end_year %>% 
-  filter(!is.na(second_year_end_year))
-```
-
 ### Merge dates to original data.frame
 
 Merge two data.frames with extracted dates and original data.frame:
@@ -184,7 +160,7 @@ df_dates <- bind_cols(
   df_dates_end_year)
 ```
 
-Retrieve very first date present in the four new columns:
+Retrieve very first date present in the three new columns:
 
 ```{r first_year_final}
 df_dates <- df_dates %>%
@@ -197,5 +173,5 @@ df_dates <- df_dates %>%
                                    first_year_end_year,
                                    if_else(!is.na(first_year_end_year),
                                            first_year_end_year,
-                                           second_year_end_year)))))
+                                           NA_integer_)))))
 ```
