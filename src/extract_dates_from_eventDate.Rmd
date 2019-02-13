@@ -184,7 +184,7 @@ df_dates <- bind_cols(
   df_dates_end_year)
 ```
 
-Retrieve first and second date present in the four new columns:
+Retrieve very first date present in the four new columns:
 
 ```{r first_year_final}
 df_dates <- df_dates %>%
