@@ -104,7 +104,7 @@ We repeat same procedure on second column of our data: `SIR_end_year`.
 
 ### Second column
 
-From first column `SIR_end_year`:
+From second column `SIR_end_year`:
 
 ```{r extract_year_2ndcol}
 dates_end_year <-
